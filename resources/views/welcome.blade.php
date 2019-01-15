@@ -64,6 +64,10 @@
         </style>
     </head>
     <body>
+        @if (\Illuminate\Support\Facades\Session::has('result'))
+            <h1>{{\Illuminate\Support\Facades\Session::get('result')}}</h1>
+
+        @endif
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">

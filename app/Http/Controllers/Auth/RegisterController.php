@@ -4,9 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Mail;
 
 class RegisterController extends Controller
 {
@@ -28,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -50,6 +54,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
@@ -63,10 +68,63 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $data['activation_code'] = str_random(30).time();
+
+        $user = User::create([
             'name' => $data['name'],
+            'surname' => $data['surname'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => bcrypt($data['password']),
+            'active' => false,
+            'activation_code' => $data['activation_code'],
         ]);
+
+        // Send confirmation code
+        Mail::send('emails.activation_user', $data, function($message) use ($data) {
+            $message->to($data['email'], $data['name'])->subject('Por favor confirma tu correo');
+        });
+
+        return $user;
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        return redirect()->route('inicio')->with('result', 'se ha enviado un email a tu dirección para activar la cuenta');
+    }
+
+    /**
+     * Revisa si el código de activación existe y de ser asi activa el usuario en cuestión.
+     *
+     * @param string $activationCode
+     * @return \Illuminate\Http\RedirectResponse|string
+     */
+    public function activateUser(string $activationCode)
+    {
+        try {
+            $user = app(User::class)->where('activation_code', $activationCode)->first();
+            //dd($user);
+            if (!$user) {
+                return "ERROR! The code does not exist for any user in our system.";
+            }
+            $user->active          = 1;
+            $user->activation_code = null;
+            //dd($user);
+            $user->save();
+            //auth()->login($user);
+        } catch (\Exception $exception) {
+            logger()->error($exception);
+            return "Whoops! something went wrong.";
+        }
+        return redirect()->to('/user/login');
     }
 }

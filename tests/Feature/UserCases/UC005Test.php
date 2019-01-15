@@ -1,12 +1,12 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\UserCases;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class UC05test extends TestCase
+class UC005Test extends TestCase
 {
     use RefreshDatabase;
 
@@ -29,8 +29,8 @@ class UC05test extends TestCase
             'password' => '111111',
             'password_confirmation' => '111111'
         ])->assertRedirect('/')
-            ->assertStatus(302)
-            ->assertSee('email');
+            ->assertStatus(302);
+            //->assertSee('email');
 
         //Usuario registrado en BBDD
         $this->assertDatabaseHas('users', [
@@ -59,7 +59,9 @@ class UC05test extends TestCase
 
         $this -> createUser([
                 'email' => $email,
-                'activation_code' => $code]
+                'activation_code' => $code,
+                'active' => false,
+                ]
         );
 
         $this->assertDatabaseHas('users', [
@@ -72,5 +74,12 @@ class UC05test extends TestCase
         $this->assertDatabaseHas('users', [
             'email' => $email,
             'active' => 1]);
+    }
+
+    /** @test  */
+    public function it_test_that_a_invalid_activation_code_can_be_used()
+    {
+        $this->get('/user/register/verify/codigoinexistente')
+            ->assertSee('ERROR');
     }
 }
