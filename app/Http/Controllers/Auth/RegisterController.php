@@ -99,7 +99,7 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        return redirect()->route('inicio')->with('result', 'se ha enviado un email a tu dirección para activar la cuenta');
+        return redirect()->route('inicio')->with('result', trans('passwords.sent'));
     }
 
     /**
