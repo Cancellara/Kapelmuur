@@ -24,18 +24,21 @@ Route::group(['middleware' =>['multi.language']], function() {
 
 //USER
 //Registro
-    Route::get('/user/register', 'Auth\RegisterController@showRegistrationForm')->name('user.register');
-    Route::post('/user/register', 'Auth\RegisterController@register');
-    Route::get('/user/register/verify/{code}', 'Auth\RegisterController@activateUser')->name('user.activate');
+    Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+    Route::post('/register', 'Auth\RegisterController@register')->name('register.user');
+    Route::get('/verify/user/{code}', 'Auth\RegisterController@activateUser')->name('activate');
+    Route::post('/registerShop', function () {
+        return 'register Shop';
+    })->name('register.shop');
 //Login
-    Route::get('/user/login', function () {
+    Route::get('login', function () {
         return 'user login';
-    });
+    })->name('login');
 
 
 //A ir modificando
 // Authentication Routes...
-    $this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    //$this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
     $this->post('login', 'Auth\LoginController@login');
     $this->post('logout', 'Auth\LoginController@logout')->name('logout');
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mail\UserActivationEmail;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -69,8 +70,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $data['activation_code'] = str_random(30).time();
-
         $user = User::create([
             'name' => $data['name'],
             'surname' => $data['surname'],
@@ -79,11 +78,6 @@ class RegisterController extends Controller
             'active' => false,
             'activation_code' => $data['activation_code'],
         ]);
-
-        // Send confirmation code
-        Mail::send('emails.activation_user', $data, function($message) use ($data) {
-            $message->to($data['email'], $data['name'])->subject('Por favor confirma tu correo');
-        });
 
         return $user;
     }
@@ -98,7 +92,11 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
+        $request['activation_code'] = str_random(30).time();
+
         event(new Registered($user = $this->create($request->all())));
+
+        Mail::send(new UserActivationEmail($request->name, $request->email, $request->activation_code));
 
         return redirect()->route('inicio')->with('result', trans('passwords.sent'));
     }
@@ -126,6 +124,6 @@ class RegisterController extends Controller
             logger()->error($exception);
             return "Whoops! something went wrong.";
         }
-        return redirect()->to('/user/login');
+        return redirect()->to('/login');
     }
 }

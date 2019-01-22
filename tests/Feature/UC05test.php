@@ -13,7 +13,7 @@ class UC05test extends TestCase
     /** @test  */
     public function it_test_that_an_user_register_page_exists()
     {
-        $this->get('user/register')
+        $this->get('/register')
             ->assertStatus(200)
             ->assertSee('reg');
     }
@@ -22,7 +22,7 @@ class UC05test extends TestCase
     public function it_test_that_somebody_can_register_as_a_user()
     {
         //Petición
-        $this->post('user/register', [
+        $this->post('/register', [
             'name' => 'Miguel',
             'surname' => 'Ruiz',
             'email' => 'miguelintxi@gmail.com',
@@ -41,7 +41,7 @@ class UC05test extends TestCase
     /** @test  */
     public function it_test_that_register_form_is_validated()
     {
-        $this->post('user/register', [
+        $this->post('/register', [
             'name' => 'Miguel',
             'surname' => 'Ruiz',
             'email' => 'miguelintxi@gmail.com',
@@ -55,7 +55,7 @@ class UC05test extends TestCase
     {
         $code = '1234456';
         $email = 'emiliodeprueba@gmail.com';
-        $uri = 'user/register/verify/' . $code;
+        $uri = '/register/verify/' . $code;
 
         $this -> createUser([
                 'email' => $email,
@@ -67,7 +67,7 @@ class UC05test extends TestCase
             'active' => 0]);
 
         $this->get($uri)
-            ->assertRedirect('/user/login');
+            ->assertRedirect('login');
 
         $this->assertDatabaseHas('users', [
             'email' => $email,

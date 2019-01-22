@@ -43,9 +43,10 @@
                 </div>
                 <div class="col-md-2">
                     <i class="fas fa-globe fa-2x mr-sm-1 ic-navbar"></i>
-                    <i class="fas fa-user fa-2x mr-sm-1 ic-navbar"></i>
+                    <a href="{{ route('register') }}"><i class="fas fa-user-plus fa-2x mr-sm-1 ic-navbar"></i></a>
+                    <a href="{{ route('login') }}"><i class="fas fa-user fa-2x mr-sm-1 ic-navbar"></i></a>
                     <i class="fas fa-shopping-cart fa-2x mr-sm-1 ic-navbar"></i>
-                    <i class="fas fa-sign-out-alt fa-2x mr-sm-1 ic-navbar"></i>
+                    <a href="{{ route('logout') }}"><i class="fas fa-sign-out-alt fa-2x mr-sm-1 ic-navbar"></i></a>
                 </div>
             </div>
         </nav>
