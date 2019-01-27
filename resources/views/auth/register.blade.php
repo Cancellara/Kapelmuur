@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('register.user') }}</div>
+                    <div class="card-header">{{ __('auth.user') }}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('register.user') }}">
@@ -86,7 +86,7 @@ old('email') }}" required>
 
                                     @if ($errors->has('accept-conditions'))
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
+                                        <strong>{{ $errors->first('accept-conditions') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -110,7 +110,7 @@ old('email') }}" required>
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">{{ __('register.shop') }}</div>
+                    <div class="card-header">{{ __('auth.shop') }}</div>
 
                     <div class="card-body">
                         <form method="POST" action="{{ route('register.shop') }}">
@@ -132,15 +132,15 @@ old('email') }}" required>
                             </div>
 
                             <div class="form-group row">
-                                <label for="surname" class="col-md-4 col-form-label text-md-right">{{ __('Surname') }}</label>
+                                <label for="cif" class="col-md-4 col-form-label text-md-right">{{ __('cif') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="surname" type="text" class="form-control{{ $errors->has('surname') ? ' is-invalid' : '' }}" name="surname" value="{{ old
-('surname') }}" required autofocus>
+                                    <input id="cif" type="text" class="form-control{{ $errors->has('cif') ? ' is-invalid' : '' }}" name="cif" value="{{ old
+('cif') }}" required autofocus>
 
-                                    @if ($errors->has('surname'))
+                                    @if ($errors->has('cif'))
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('surname') }}</strong>
+                                        <strong>{{ $errors->first('cif') }}</strong>
                                     </span>
                                     @endif
                                 </div>
@@ -191,7 +191,7 @@ old('email') }}" required>
 
                                     @if ($errors->has('accept-conditions'))
                                         <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
+                                        <strong>{{ $errors->first('accept-conditions') }}</strong>
                                     </span>
                                     @endif
                                 </div>

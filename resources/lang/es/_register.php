@@ -13,8 +13,6 @@ return [
     |
     */
 
-    'failed' => 'Estas credenciales no coinciden con nuestros registros.',
-    'throttle' => 'Demasiados intentos de login. Por favor intentalo de nuevo en :seconds segundos.',
     'shop' => 'Registrarse como tienda',
     'user' => 'Registrarse como usuario',
 

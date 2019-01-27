@@ -27,14 +27,11 @@ Route::group(['middleware' =>['multi.language']], function() {
     Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
     Route::post('/register', 'Auth\RegisterController@register')->name('register.user');
     Route::get('/verify/user/{code}', 'Auth\RegisterController@activateUser')->name('activate');
-    Route::post('/registerShop', function () {
-        return 'register Shop';
-    })->name('register.shop');
+
 //Login
     Route::get('login', function () {
         return 'user login';
     })->name('login');
-
 
 //A ir modificando
 // Authentication Routes...
@@ -44,6 +41,11 @@ Route::group(['middleware' =>['multi.language']], function() {
 
 // Password Reset Routes...
 });
+
+//SHOP
+//Registro
+Route::post('/registerShop', 'Shop\Auth\RegisterController@register')->name('register.shop');
+Route::get('/shop/typeSelection', 'Shop\Auth\RegisterController@showTypeSelectionForm')->name('shop.typeSelection');
 
 Route::get('/lang/{lang}', function ($lang) {
     session(['lang' => $lang]);
