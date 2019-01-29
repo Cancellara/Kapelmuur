@@ -24,5 +24,4 @@ class ShopType extends Model
         return $this->hasMany(Shop::class);
     }
 
-
 }

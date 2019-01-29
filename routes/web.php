@@ -15,7 +15,7 @@ Route::group(['middleware' =>['multi.language']], function() {
 
     Route::get('/', function () {
 
-        return view('welcome');
+        return view('home');
     })->name('inicio');
 
 //Auth::routes();
@@ -26,7 +26,7 @@ Route::group(['middleware' =>['multi.language']], function() {
 //Registro
     Route::get('/register', 'Auth\RegisterController@showRegistrationForm')->name('register');
     Route::post('/register', 'Auth\RegisterController@register')->name('register.user');
-    Route::get('/verify/user/{code}', 'Auth\RegisterController@activateUser')->name('activate');
+    Route::get('/verify/user/{code}', 'Auth\RegisterController@activateUser')->name('activate.user');
 
 //Login
     Route::get('login', function () {
@@ -36,16 +36,20 @@ Route::group(['middleware' =>['multi.language']], function() {
 //A ir modificando
 // Authentication Routes...
     //$this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
-    $this->post('login', 'Auth\LoginController@login');
-    $this->post('logout', 'Auth\LoginController@logout')->name('logout');
+    Route::post('login', 'Auth\LoginController@login');
+    Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Password Reset Routes...
+
+    //SHOP
+//Registro
+    Route::post('/registerShop', 'Shop\Auth\RegisterController@register')->name('register.shop');
+    Route::get('/shop/typeSelection', 'Shop\Auth\RegisterController@showTypeSelectionForm')->name('shop.typeSelection');
+    Route::post('/shop/typeSelection', 'Shop\Auth\RegisterController@typeSelection')->name('shop.selection');
+    Route::get('/verify/shop/{code}', 'Shop\Auth\RegisterController@activateShop')->name('activate.shop');
 });
 
-//SHOP
-//Registro
-Route::post('/registerShop', 'Shop\Auth\RegisterController@register')->name('register.shop');
-Route::get('/shop/typeSelection', 'Shop\Auth\RegisterController@showTypeSelectionForm')->name('shop.typeSelection');
+
 
 Route::get('/lang/{lang}', function ($lang) {
     session(['lang' => $lang]);

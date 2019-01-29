@@ -1,4 +1,4 @@
-@extends('layouts.app_old')
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -14,7 +14,8 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                        <li><a href="{{ route('lang', ['en']) }}">En</a></li>
+                        <li><a href="{{ route('lang', ['es']) }}">Es</a></li>
                 </div>
             </div>
         </div>

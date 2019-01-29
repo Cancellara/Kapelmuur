@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
 <body>
-    <div class="app">
+    <div class="app ">
         <nav class="navbar navbar-light bg-light justify-content-between">
             <div class="container-fluid">
                 <div class="col-md-2">
@@ -33,7 +33,7 @@
                         <img src="{{asset('img/logo/logo_75x100.png')}}" alt="{{ __('app/navbar.altLogo') }}">
                     </a>
                 </div>
-                <div class="col-md-8">
+                <div class="col-md-6">
                     <div class="input-group md-form form-sm form-2 pl-0">
                         <input class="form-control my-0 py-1 amber-border" type="text" placeholder="{{ __('app/navbar.searchText') }}" aria-label="Search">
                         <div class="input-group-append">
@@ -41,13 +41,51 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <i class="fas fa-globe fa-2x mr-sm-1 ic-navbar"></i>
-                    <a href="{{ route('register') }}"><i class="fas fa-user-plus fa-2x mr-sm-1 ic-navbar"></i></a>
-                    <a href="{{ route('login') }}"><i class="fas fa-user fa-2x mr-sm-1 ic-navbar"></i></a>
-                    <i class="fas fa-shopping-cart fa-2x mr-sm-1 ic-navbar"></i>
-                    <a href="{{ route('logout') }}"><i class="fas fa-sign-out-alt fa-2x mr-sm-1 ic-navbar"></i></a>
+                @shop
+                    <div class="col-md-1">
+                        <a href="#">
+                            <i class="fas fa-user mr-sm-1 ic-navbar">&nbsp;{{auth('shop')->user()->name }}</i>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <i class="fas fa-sign-out-alt mr-sm-1 ic-navbar">&nbsp;Logout</i>
+                        </a>
+                    </div>
+                @endshop
+                @visitor
+                <div class="col-md-1">
+                    <a href="{{ route('login') }}">
+                        <i class="fas fa-sign-in-alt  mr-sm-1 ic-navbar" aria-hidden="true">
+                            &nbsp;Login
+                        </i>
+                    </a>
                 </div>
+                <div class="col-md-1">
+                    <a href="{{ route('register') }}">
+                        <i class="fas fa-user-plus  mr-sm-1 ic-navbar">&nbsp;Register</i>
+                    </a>
+                </div>
+                 <div class="col-md-1">
+                    <i class="fas fa-shopping-cart  mr-sm-1 ic-navbar">&nbsp;Cart</i>
+                 </div>
+                @endvisitor
+                @user
+                    <div class="col-md-1">
+                        <i class="fas fa-shopping-cart  mr-sm-1 ic-navbar">&nbsp;Cart</i>
+                    </div>
+                @enduser
+                <div class="col-md-1">
+                    <i class="fas fa-globe  mr-sm-1 ic-navbar">&nbsp;Lang</i>
+                </div>
+
+
+
             </div>
         </nav>
 

@@ -36,4 +36,37 @@ class User extends Authenticatable
     protected $casts = [
         "active" => "boolean",
     ];
+
+    /**
+     * Para saber el tipo de usuario autenticado
+     *
+     *
+     * @return boolean
+     */
+    public function isUser()
+    {
+        return true;
+    }
+
+    /**
+     * Para saber el tipo de usuario autenticado
+     *
+     *
+     * @return boolean
+     */
+    public function isShop()
+    {
+        return false;
+    }
+
+    /**
+     * Para saber el tipo de usuario autenticado
+     *
+     *
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return false;
+    }
 }

@@ -46,4 +46,56 @@ class Shop extends Authenticatable
     {
         return $this->belongsTo(ShopType::class);
     }
+
+    /**
+     * Para saber el tipo de usuario autenticado
+     *
+     *
+     * @return boolean
+     */
+    public function isUser()
+    {
+        return false;
+    }
+    /**
+     * Devuelve todos los posibles valores de id de los tipos de tienda
+     *
+     *
+     * @return array
+     */
+    public static function getShopTypeIdList()
+    {
+        $shopTypes = ShopType::all();
+
+        $shopTypeIdList = array();
+
+        foreach ($shopTypes as $shopType)
+        {
+            array_push($shopTypeIdList, $shopType->id);
+        }
+
+        return $shopTypeIdList;
+    }
+
+    /**
+     * Para saber el tipo de usuario autenticado
+     *
+     *
+     * @return boolean
+     */
+    public function isShop()
+    {
+        return true;
+    }
+
+    /**
+     * Para saber el tipo de usuario autenticado
+     *
+     *
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return false;
+    }
 }
