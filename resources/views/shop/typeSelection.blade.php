@@ -13,8 +13,6 @@
     @endif
 
 
-    <form method="POST" id="payment-form" action="{{ route('shop.selection') }}">
-        {{ csrf_field() }}
         <table>
             <th>{{ __('shop/typeSelection.typeName') }}</th>
             <th>{{ __('shop/typeSelection.initialFee') }}</th>
@@ -28,11 +26,23 @@
                     <td>{{ $shopType->initial_fee }}</td>
                     <td>{{ $shopType->montly_fee }}</td>
                     <td>{{ $shopType->max_active_articles }}</td>
-                    <td><input type="radio" name="shopType" value="{{ $shopType->id }}"></td>
+                    <td>
+                        @if ( $shopType->initial_fee <= 0)
+                            <form method="POST" id="payment-form" action="{{ route('shop.selection.free') }}">
+                                {{ csrf_field() }}
+                                <input type="text" name = "shopType" style="visibility:hidden" value="{{ $shopType->id }}">
+                                <button type="submit" class="btn btn-primary">{{ __('shop/typeSelection.choose') }}</button>
+                            </form>
+                        @else
+                            <form method="POST" id="payment-form" action="{{ route('shop.selection.paying') }}">
+                                {{ csrf_field() }}
+                                <input type="text" name = "shopType" style="visibility:hidden" value="{{ $shopType->id }}">
+                                <button type="submit" class="btn btn-primary">{{ __('shop/typeSelection.choose') }}</button>
+                            </form>
+                        @endif
+                    </td>
                     <td>Click! pending</td>
                 </tr>
             @endforeach
         </table>
-        <button type="submit" class="btn btn-primary">{{ __('shop/typeSelection.choose') }}</button>
-    </form>
 @endsection

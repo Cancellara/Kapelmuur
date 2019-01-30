@@ -115,10 +115,7 @@ class RegisterController extends Controller
 
     }
     /**
-     * Tipo de tienda elegida.
-     * Actualiza el campo shopType al valor seleccionado.
-     * Si es una cuenta gratuita envía correo.
-     * Si es una cuenta de pago pasa a PayPal.
+     * Envía correo activación cuenta gratuita..
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */

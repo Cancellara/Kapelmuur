@@ -45,8 +45,11 @@ Route::group(['middleware' =>['multi.language']], function() {
 //Registro
     Route::post('/registerShop', 'Shop\Auth\RegisterController@register')->name('register.shop');
     Route::get('/shop/typeSelection', 'Shop\Auth\RegisterController@showTypeSelectionForm')->name('shop.typeSelection');
-    Route::post('/shop/typeSelection', 'Shop\Auth\RegisterController@typeSelection')->name('shop.selection');
+    Route::post('/shop/freeSelection', 'Shop\Auth\RegisterController@typeSelection')->name('shop.selection.free');
     Route::get('/verify/shop/{code}', 'Shop\Auth\RegisterController@activateShop')->name('activate.shop');
+    Route::post('/shop/paySelection', 'Shop\Auth\RegistrationPaymentController@initialFeePayment')->name('shop.selection.paying');
+
+    Route::get('status', 'Shop\Auth\RegistrationPaymentController@getPaymentStatus');
 });
 
 
