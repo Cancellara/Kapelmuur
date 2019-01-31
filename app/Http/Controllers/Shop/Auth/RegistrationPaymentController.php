@@ -50,6 +50,13 @@ class RegistrationPaymentController extends Controller
         $request->validated();
         //obtenemos los datos del tipo de tienda
         $shopType = ShopType::find($request['shopType']);
+        //Cogemos la tienda en curso
+        $shop = auth('shop')->user();
+        //Cambiamos el tipo de cuenta.
+        $shop->shop_type = $shopType->id;
+        $shop->save();
+        //Preparamos la ruta para activar la cuenta si se procede con el pago
+        $activationURL = '/verify/shop/'. $shop->activation_code;
 
         //Proceso PayPal: ToDo: Refactorizar en un treat
         //PCreamos un pagador.
@@ -75,8 +82,8 @@ class RegistrationPaymentController extends Controller
             ->setDescription('Your transaction description');
         //Redirecciones
         $redirect_urls = new RedirectUrls();
-        $redirect_urls->setReturnUrl(URL::to('status')) /** Specify return URL **/
-        ->setCancelUrl(URL::to('status'));
+        $redirect_urls->setReturnUrl(URL::to($activationURL)) /** Specify return URL **/
+        ->setCancelUrl(URL::to('/shop/typeSelection'));
         $payment = new Payment();
         $payment->setIntent('Sale')
             ->setPayer($payer)
@@ -87,11 +94,10 @@ class RegistrationPaymentController extends Controller
             $payment->create($this->_api_context);
         } catch (\PayPal\Exception\PPConnectionException $ex) {
             if (\Config::get('app.debug')) {
-                \Session::put('error', 'Connection timeout');
-                return view('/paypal/donePaypal');
+                return view('/')->with(['errorMessage' => trans('app/error.paypalTimeout')]);
             } else {
                 \Session::put('error', 'Some error occur, sorry for inconvenient');
-                return view('/paypal/donePaypal');
+                return view('/')->with(['errorMessage' => trans('app/error.paypalError')]);
             }
         }
         foreach ($payment->getLinks() as $link) {
@@ -107,7 +113,7 @@ class RegistrationPaymentController extends Controller
             return Redirect::away($redirect_url);
         }
         \Session::put('error', 'Unknown error occurred');
-        return view('/paypal/donePaypal');
+        return view('/');
     }
     /**
      * Comprueba el estado de la transacción de paypal

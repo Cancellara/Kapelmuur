@@ -125,21 +125,25 @@ class RegisterController extends Controller
 
         //Obtenemos la cantidad del pago inicial.
         $amount = ShopType::find($request['shopType'])->initial_fee;
-        $name = \auth('shop')->user()->name;
-        $email = \auth('shop')->user()->email;
-        $activation_code = \auth('shop')->user()->activation_code;
-        $layout = 'emails.activation_shop';
+
         //Si es gratuita: Email
         if($amount <= 0)
         {
+
+            $name = \auth('shop')->user()->name;
+            $email = \auth('shop')->user()->email;
+            $activation_code = \auth('shop')->user()->activation_code;
+            $layout = 'emails.activation_shop';
+
+
             Mail::send(new ActivationEmail($name, $email, $activation_code, $layout));
-            return redirect()->route('inicio')->with('result', trans('passwords.sent'));
+            return redirect()->route('inicio')->with('confirmMessage', trans('app/confirm.actCodeSent'));
         }
         else {
-            return $amount;
+            //Algo se ha hecho mal, una cuenta gratuita no puede tener valor mayor que 0 en la tarifa inicial
+            abort(400);
         }
-       /* dd($this->guard('shop')->user());
-        $shop = $this->guard('shop')->user();*/
+
 
     }
     /**
@@ -148,24 +152,33 @@ class RegisterController extends Controller
      * @param string $activationCode
      * @return \Illuminate\Http\RedirectResponse|string
      */
-    public function activateShop(string $activationCode)
+    public function activateShop(Request $request, string $activationCode)
     {
-        try {
-            $shop = app(Shop::class)->where('activation_code', $activationCode)->first();
+        $shop = Shop::where('activation_code', $activationCode)->first();
 
-            if (!$shop) {
-                return "ERROR! The code does not exist for any user in our system.";
-            }
-            $shop->active          = 1;
-            $shop->activation_code = null;
-            //dd($user);
-            $shop->save();
-            //auth()->login($user);
-        } catch (\Exception $exception) {
-            logger()->error($exception);
-            return "Whoops! something went wrong.";
+        if (!$shop) {
+            return redirect()->to('/')->with(['errorMessage' => trans('app/errors.actCodeNotFound')]);
         }
-        return redirect()->to('/login');
+        $shop->active = 1;
+        $shop->activation_code = null;
+        $shop->save();
+        //Finalizamos la sesión para que el usuario se tenga que volver a logar.
+        $this->logout($request);
+
+        return redirect()->to('/')->with(['confirmMessage' => trans('app/confirm.accountActivated')]);
+    }
+    /**
+     * Log the user out of the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function logout(Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
     }
     /**
      * Get the guard to be used during authentication.

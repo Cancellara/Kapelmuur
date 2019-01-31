@@ -30,7 +30,8 @@ Route::group(['middleware' =>['multi.language']], function() {
 
 //Login
     Route::get('login', function () {
-        return 'user login';
+
+        return auth('shop')->user();
     })->name('login');
 
 //A ir modificando
