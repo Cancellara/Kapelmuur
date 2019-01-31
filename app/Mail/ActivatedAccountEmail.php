@@ -7,7 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ActivationEmail extends Mailable
+class ActivatedAccountEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -15,20 +15,18 @@ class ActivationEmail extends Mailable
     public $emailtTo;
     public $subject;
     public $view;
-    public $activation_code;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(string $name, string $emailtTo, string $activation_code, string $view)
+    public function __construct(string $name, string $emailtTo)
     {
         $this->name = $name;
         $this->emailtTo = $emailtTo;
-        $this->activation_code = $activation_code;
-        $this->subject = trans('email/userRegister.subject');
-        $this->view = $view;
+        $this->subject = trans('email/activatedAccount.subject');
+        $this->view = 'emails/activedAccount';
     }
 
     /**
@@ -41,6 +39,7 @@ class ActivationEmail extends Mailable
         return $this->subject($this->subject)
             ->to($this->emailtTo)
             ->view($this->view, ['name' => $this->name,
-                    'activation_code' => $this->activation_code]);
+                ]);
     }
+
 }

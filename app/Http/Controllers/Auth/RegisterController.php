@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Mail\ActivationEmail;
+use App\Mail\ActivationCodeEmail;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -96,7 +96,7 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-        Mail::send(new ActivationEmail($request->name, $request->email, $request->activation_code, 'emails.activation_user'));
+        Mail::send(new ActivationCodeEmail($request->name, $request->email, $request->activation_code, 'emails.activation_user'));
 
         return redirect()->route('inicio')->with('result', trans('passwords.sent'));
     }
@@ -119,7 +119,8 @@ class RegisterController extends Controller
             $user->activation_code = null;
             //dd($user);
             $user->save();
-            //auth()->login($user);
+            //Enviamos correo de confirmación.
+            Mail::send(new ActivatedAccountEmail($user->name, $user->email));
         } catch (\Exception $exception) {
             logger()->error($exception);
             return "Whoops! something went wrong.";

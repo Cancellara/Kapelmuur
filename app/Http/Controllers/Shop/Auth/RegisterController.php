@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Shop\Auth;
 
 use App\Http\Requests\Shop\ShopTypeSelectionRequest;
-use App\Mail\ActivationEmail;
+use App\Mail\ActivatedAccountEmail;
+use App\Mail\ActivationCodeEmail;
 use App\Model\Shop\Shop;
 use App\Model\Shop\ShopType;
 use App\User;
@@ -136,7 +137,7 @@ class RegisterController extends Controller
             $layout = 'emails.activation_shop';
 
 
-            Mail::send(new ActivationEmail($name, $email, $activation_code, $layout));
+            Mail::send(new ActivationCodeEmail($name, $email, $activation_code, $layout));
             return redirect()->route('inicio')->with('confirmMessage', trans('app/confirm.actCodeSent'));
         }
         else {
@@ -162,6 +163,8 @@ class RegisterController extends Controller
         $shop->active = 1;
         $shop->activation_code = null;
         $shop->save();
+        //Enviamos correo de confirmación.
+        Mail::send(new ActivatedAccountEmail($shop->name, $shop->email));
         //Finalizamos la sesión para que el usuario se tenga que volver a logar.
         $this->logout($request);
 
