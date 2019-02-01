@@ -98,4 +98,5 @@ class Shop extends Authenticatable
     {
         return false;
     }
+
 }

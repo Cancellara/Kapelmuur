@@ -28,12 +28,12 @@
                 <tbody>
                     @foreach ($shopTypes as $shopType)
                         <tr>
-                            <td class="bg-warning">{{ $shopType->description }}</td>
-                            <td class="bg-warning">{{ $shopType->initial_fee }}</td>
-                            <td class="bg-warning">{{ $shopType->montly_fee }}</td>
-                            <td class="bg-warning">{{ $shopType->max_active_articles }}</td>
-                            <td class="bg-warning">Click! pending</td>
-                            <td class="bg-warning">
+                            <td class="bg-warning align-middle">{{ $shopType->description }}</td>
+                            <td class="bg-warning align-middle">{{ $shopType->initial_fee }}</td>
+                            <td class="bg-warning align-middle">{{ $shopType->montly_fee }}</td>
+                            <td class="bg-warning align-middle">{{ $shopType->max_active_articles }}</td>
+                            <td class="bg-warning align-middle">Click! pending</td>
+                            <td class="bg-warning align-middle">
                                 @if ( $shopType->initial_fee <= 0)
                                     <form method="POST" id="payment-form" action="{{ route('shop.selection.free') }}">
                                         {{ csrf_field() }}

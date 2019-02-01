@@ -73,7 +73,7 @@ class UC005Test extends TestCase
 
         $this->assertDatabaseHas('users', [
             'email' => $email,
-            'active' => 1]);
+            'active' => true]);
     }
 
     /** @test  */
