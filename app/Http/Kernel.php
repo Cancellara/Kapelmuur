@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'multi.language' => \App\Http\Middleware\MultiLanguageMiddelware::class,
         'shop.disabled' => \App\Http\Middleware\ShopAccountDisabled::class,
+        'auth.user' => \App\Http\Middleware\AuthenticateAsUser::class,
     ];
 
     /**

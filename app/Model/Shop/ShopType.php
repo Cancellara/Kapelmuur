@@ -24,4 +24,13 @@ class ShopType extends Model
         return $this->hasMany(Shop::class);
     }
 
+    /**
+     * Relacion de Eloquent
+     *
+     */
+    public function rate_sales_articles()
+    {
+        return $this->hasMany(RateSalesArticles::class);
+    }
+
 }

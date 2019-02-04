@@ -29,19 +29,20 @@ Route::group(['middleware' =>['multi.language']], function() {
     Route::get('/verify/user/{code}', 'Auth\RegisterController@activateUser')->name('activate.user');
 
 //Login
-    Route::get('login', function () {
-
-        return auth('shop')->user();
-    })->name('login');
+    Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
+    Route::post('login', 'Auth\LoginController@login');
 
 //A ir modificando
 // Authentication Routes...
     //$this->get('login', 'Auth\LoginController@showLoginForm')->name('login');
-    Route::post('login', 'Auth\LoginController@login');
+
     Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 
 // Password Reset Routes...
 
+    //USER
+    //Panel de control
+    Route::get('/user/controlPanel', 'User\Actions\ControlPanelController@showControlPanel')->name('user.panel');
     //SHOP
 //Registro
     Route::post('/registerShop', 'Shop\Auth\RegisterController@register')->name('register.shop');
@@ -51,6 +52,11 @@ Route::group(['middleware' =>['multi.language']], function() {
     Route::post('/shop/paySelection', 'Shop\Auth\RegistrationPaymentController@initialFeePayment')->name('shop.selection.paying');
 
     Route::get('status', 'Shop\Auth\RegistrationPaymentController@getPaymentStatus');
+
+    //Inicio sesión
+    Route::post('/loginShop', 'Shop\Auth\LoginController@login')->name('login.shop');
+    //Panel de control
+    Route::get('/shop/controlPanel', 'Shop\Actions\ControlPanelController@showControlPanel')->name('shop.panel');
 });
 
 

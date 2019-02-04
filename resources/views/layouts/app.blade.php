@@ -44,7 +44,7 @@
                 @shop
                     <div class="col-md-1">
                         <a href="#">
-                            <i class="fas fa-user mr-sm-1 ic-navbar">&nbsp;{{auth('shop')->user()->name }}</i>
+                            <i class="fas fa-user mr-sm-1 ic-navbar">&nbsp;{{auth('shop')->user()->name }} {{ __('app/navbar.shop') }}</i>
                         </a>
                     </div>
                     <div class="col-md-1">
@@ -76,6 +76,21 @@
                  </div>
                 @endvisitor
                 @user
+                    <div class="col-md-1">
+                        <a href="#">
+                            <i class="fas fa-user mr-sm-1 ic-navbar">&nbsp;{{auth('web')->user()->name }} {{ __('app/navbar.user')  }}</i>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                         document.getElementById('logout-form').submit();">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                            <i class="fas fa-sign-out-alt mr-sm-1 ic-navbar">&nbsp;Logout</i>
+                        </a>
+                    </div>
                     <div class="col-md-1">
                         <i class="fas fa-shopping-cart  mr-sm-1 ic-navbar">&nbsp;Cart</i>
                     </div>

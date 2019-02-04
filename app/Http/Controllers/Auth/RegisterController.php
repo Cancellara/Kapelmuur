@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Mail\ActivatedAccountEmail;
 use App\Mail\ActivationCodeEmail;
 use App\User;
 use App\Http\Controllers\Controller;

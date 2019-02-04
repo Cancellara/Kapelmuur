@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Shop\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Model\Shop\Shop;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\User;
 use Illuminate\Http\Request;
@@ -11,17 +12,6 @@ use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -29,7 +19,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/user/controlPanel';
+    protected $redirectTo = '/shop/controlPanel';
 
     /**
      * Create a new controller instance.
@@ -38,7 +28,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest:shop');
     }
 
     public function login(Request $request)
@@ -51,8 +41,9 @@ class LoginController extends Controller
             $this->fireLockoutEvent($request);
             return $this->sendLockoutResponse($request);
         }
-        $user = User::where('email', $request->get('email'))->first();
-        if ($user && $user->active && $this->attemptLogin($request)) {
+        $shop = Shop::where('email', $request->get('email'))->first();
+        //dd($shop);
+        if ($shop && $shop->active && $this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
         // If the login attempt was unsuccessful we will increment the number of attempts
@@ -60,10 +51,18 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
         //Si usuario inactivo añadimos el mensaje que lo indica
-        if(!($user) || !($user->active))
+        if(!($shop) || !($shop->active))
             $request->session()->put(['errorMessage' => trans('app/error.userInactive')]);
         return $this->sendFailedLoginResponse($request);
     }
 
-
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
+    protected function guard()
+    {
+        return Auth::guard('shop');
+    }
 }

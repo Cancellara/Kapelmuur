@@ -14,5 +14,7 @@ return [
     'altLogo' => 'Kapelmuur Logo',
     'searchText' => 'Type keywords',
     'searchButton' => 'Search',
+    'shop' => 'Shop',
+    'user' => 'User',
 
 ];
