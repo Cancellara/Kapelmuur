@@ -2,6 +2,7 @@
 
 namespace App\Model\Shop;
 
+use App\Model\Advertisement\Advertisement;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -45,6 +46,16 @@ class Shop extends Authenticatable
     public function shopType()
     {
         return $this->belongsTo(ShopType::class);
+    }
+
+    /**
+     * Relacion de Eloquent
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function advertisements()
+    {
+        return $this->hasMany(Advertisement::class);
     }
 
     /**
